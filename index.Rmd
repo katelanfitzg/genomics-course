@@ -1,13 +1,13 @@
 ---
 title: "index"
+author: "Katelan Fitzgerald"
+date: 8/31/2020
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
-Lab 1 https://katelan-fitzgerald.rstudio.cloud/54e0f6dc955a42d39cf76dd48391adbf/?view=rmarkdown
+Biology 567 Lab Reports
+[Lab 2](Lab2.html)
 
 
 
