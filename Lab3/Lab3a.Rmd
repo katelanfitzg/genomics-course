@@ -1,0 +1,137 @@
+---
+title: "Lab3a"
+author: "Katelan Fitzgerald"
+date: "9/7/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## TIDYVERSE
+
+```{r}
+library(tidyverse)
+```
+
+## DOWNLOAD FIGSHARE FILE
+
+``` {r}
+download.file(url="https://ndownloader.figshare.com/files/2292169",
+destfile = "data/portal_data_joined.csv")
+```
+
+## CHALLENGE 1
+
+``` {r, results = "hide"}
+surveys <- read.csv("data/portal_data_joined.csv")
+surveys
+head(surveys)
+view(surveys)
+
+str(surveys)
+# class object: data frame
+# how many rows: 34786
+# how many columns: 13
+# how many species: 48
+
+```
+
+## CHALLENGE 2
+
+```{r}
+surveys <- read.csv("data/portal_data_joined.csv")
+
+#1.
+surveys_200 <- surveys[200, ]
+
+#2.
+n_rows <- nrow(surveys)
+surveys_last <- surveys[n_rows, ]
+
+#3.
+surveys_middle <- surveys[n_rows / 2, ]
+
+#4.
+surveys_head <- surveys[-(7:n_rows), ]
+
+```
+
+## CHALLENGE 3
+
+```{r}
+sex <- factor(c("male", "female", "female", "male"))
+levels(sex)
+nlevels(sex)
+
+sex <- factor(sex, levels = c("male", "female"))
+sex # after re-ordering
+
+as.character(sex)
+
+plot(as.factor(surveys$sex))
+
+sex <- factor(surveys$sex)
+head(sex)
+
+head(sex)
+levels(sex)
+
+levels(sex)[1] <- "undetermined"
+levels(sex)
+
+head(sex)
+
+#1.
+levels(sex)[2:3] <- c("female", "male")
+sex <- factor(sex, levels = c("female", "male", "undetermined"))
+plot(sex)
+
+```
+## CHALLENGE 4
+
+``` {r}
+#1.
+animal_date <- data.frame(
+  animal = c("dog", "cat", "sea cucumber", "sea urchin"),
+  feel = c("furry", "squishy", "spiny", "smooth"),
+  weight = c(45, 8, 1.1, 0.8)
+)
+
+#2.
+country_climate <- data.frame(
+  country = c("Canada", "Panama", "South Africa", "Australia"),
+  climate = c("cold", "hot", "temperate", "hot/temperate"),
+  northern_hemisphere = c(TRUE, TRUE, FALSE, "FALSE"),
+  has_kangaroo = c(FALSE, FALSE, FALSE, TRUE)
+)
+
+stringsAsFactors = FALSE
+
+```
+
+## LUBRIDATE
+
+```{r}
+library(lubridate)
+```
+
+```{r, results = "hide"}
+my_date <- ymd(paste("2020", "9", "7", sep = "-"))
+str(my_date)
+
+paste(surveys$year, surveys$month, surveys$day, sep = "-
+      ")
+
+ymd(paste(surveys$year, surveys$month, surveys$day, sep = "-"))
+
+surveys$date <- ymd(paste(surveys$year, surveys$month, surveys$day, sep = "-"))
+
+str(surveys)
+
+summary(surveys$date)
+
+```
