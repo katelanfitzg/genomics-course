@@ -1,0 +1,10 @@
+---
+title: 'My Title'
+author: "Katelan Fitzgerald"
+output: html_document
+bibliography: references.bib
+---
+
+Application written in R [@RCoreTeam] using the Shiny framework [@Chang2015].
+
+# REFERENCES
