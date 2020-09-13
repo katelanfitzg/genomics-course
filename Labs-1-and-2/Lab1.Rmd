@@ -1,0 +1,47 @@
+---
+title: "lab1_Aug24"
+author: "Katelan"
+date: "8/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Exercise 1
+
+```{r ex1}
+x <- 3
+y <- 15
+x+y
+x-y
+x*y
+x/y
+```
+
+## Exercise 2
+
+```{r ex2}
+x <- 2
+y <- 3
+z = x^5 > y^4
+```
+
+## Exercise 3
+```{r ex3}
+x <- c(22,62,148,43,129)
+sum (x)
+x / sum (x)
+```
+
+## Exercise 4
+```{r ex4}
+x <- c("ATC", "CGT", "AGC", "GCG", "GAA", "TTG")
+sort (x)
+
+y <- c("A", "T", "C", "G")
+sort (y)
+```
+
