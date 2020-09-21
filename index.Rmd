@@ -12,7 +12,8 @@ Biology 567 Lab Reports
 * [Lab 2](Labs-1-and-2/Lab2.html)
 * [Lab 3a](Lab3/Lab3a.html)
 * [Lab 3b](Lab3/Lab3b.html)
-
+* [Lab 4](Lab4/Lab4.html)
+* [Lab 4a](Lab4/Lab4a.html)
 
 
 

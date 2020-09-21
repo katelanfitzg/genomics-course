@@ -1,0 +1,147 @@
+---
+title: "Lab_4"
+author: "Katelan Fitzgerald"
+date: "9/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## TIDYVERSE
+
+```{r}
+library(tidyverse)
+```
+
+## Introduction of JHU case tracking data
+``` {r}
+
+report_09_17_2020 <-   read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-17-2020.csv"))
+
+str(report_09_17_2020)
+```
+
+## INSTALL DT PACKAGE
+
+```{r, results = "hide"}
+library(DT)
+datatable(report_09_17_2020)
+```
+
+## EXERCISE PART 1
+
+``` {r}
+1. # Comparing 03_12_2020 to 09_12_2020
+report_03_12_2020 <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-12-2020.csv")) %>% 
+  rename(Country_Region = "Country/Region", Province_State = "Province/State")
+view(report_03_12_2020)
+
+report_09_12_2020 <-   read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-12-2020.csv"))
+view(report_09_12_2020)
+
+# Between the report from 3/12/20 and 9/12/20 there is signicantly more data represented and many more states and providences which have data recorded, from 218 entries to 3,954. The latest report also has columns which measures of active cases as well as specific cities and their infection rates. 
+
+
+2. # Total Counts for Each Country
+report_03_12_2020$Total_Counts <- (report_03_12_2020$Confirmed + report_03_12_2020$Deaths + report_03_12_2020$Recovered)
+report_03_12_2020 %>% 
+  group_by(Country_Region) %>% 
+  select(Country_Region, Province_State, Confirmed, Deaths, Recovered, Total_Counts) %>% 
+  summarize(Total_Deaths = sum(Deaths), Total_Recovered = sum(Recovered), Total_Confirmed = sum(Confirmed), Total_Counts = sum(Total_Counts))
+
+report_09_12_2020$Total_Counts <- (report_09_12_2020$Confirmed + report_09_12_2020$Deaths + report_09_12_2020$Recovered)
+report_09_12_2020 %>% 
+  group_by(Country_Region) %>% 
+  select(Country_Region, Province_State, Confirmed, Deaths, Recovered, Total_Counts) %>% 
+  summarize(Total_Deaths = sum(Deaths), Total_Recovered = sum(Recovered), Total_Confirmed = sum(Confirmed), Total_Counts = sum(Total_Counts))
+
+
+3. # Counts for Confirmed Cases in the US
+report_03_12_2020 %>% 
+  filter(Country_Region == "US") %>% 
+  group_by(Country_Region) %>% 
+  summarize(Total_Deaths = sum(Deaths), Total_Recovered = sum(Recovered), Total_Confirmed = sum(Confirmed), Total_Counts = sum(Total_Counts))
+
+report_09_12_2020 %>% 
+  filter(Country_Region == "US") %>% 
+  group_by(Country_Region) %>% 
+  summarize(Total_Deaths = sum(Deaths), Total_Recovered = sum(Recovered), Total_Confirmed = sum(Confirmed), Total_Counts = sum(Total_Counts))
+
+# Counts for Confirmed Cases in US States
+report_03_12_2020 %>% 
+  group_by(Province_State) %>% 
+  filter(Country_Region == "US") %>% 
+  summarize(Total_Deaths = sum(Deaths), Total_Recovered = sum(Recovered), Total_Confirmed = sum(Confirmed), Total_Counts = sum(Total_Counts))
+
+report_09_12_2020 %>% 
+  group_by(Province_State) %>% 
+  filter(Country_Region == "US") %>% 
+  summarize(Total_Deaths = sum(Deaths), Total_Recovered = sum(Recovered), Total_Confirmed = sum(Confirmed), Total_Counts = sum(Total_Counts))
+
+
+4. # Top 10 Countries with Greatest Total Deaths
+report_03_12_2020 %>% 
+  group_by(Country_Region) %>% 
+  summarize(Total_Deaths = sum(Deaths)) %>% 
+  arrange(desc(Total_Deaths)) %>% 
+  head(10)
+
+report_09_12_2020 %>% 
+  group_by(Country_Region) %>% 
+  summarize(Total_Deaths = sum(Deaths)) %>% 
+  arrange(desc(Total_Deaths)) %>% 
+  head(10)
+```
+## EXERCISES PART 2
+``` {r, results = "hide"}
+1.
+report_03_12_2020 <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-12-2020.csv")) %>% 
+  rename(Country_Region = "Country/Region", Province_State = "Province/State")
+
+report_03_12_2020 %>%
+  ggplot(data = (report_03_12_2020 %>%
+                   group_by(Country_Region) %>% 
+                   summarize(Total_Deaths = sum(Deaths)) %>% 
+                   arrange(desc(Total_Deaths)) %>% 
+                   head(10)), 
+         mapping = aes(x = Total_Deaths, y = Country_Region, color = Country_Region)) +
+    geom_point(alpha = 1)
+
+
+report_09_12_2020 <- read_csv(url("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/09-12-2020.csv"))
+
+report_09_12_2020 %>%
+  ggplot(data = (report_09_12_2020 %>%
+                   group_by(Country_Region) %>% 
+                   summarize(Total_Deaths = sum(Deaths)) %>% 
+                   arrange(desc(Total_Deaths)) %>% 
+                   head(10)), 
+         mapping = aes(x = Total_Deaths, y = Country_Region, color = Country_Region)) +
+    geom_point(alpha = 1)
+
+2.
+report_03_12_2020 %>% 
+  ggplot(data = (report_03_12_2020 %>%
+                   group_by(Country_Region) %>% 
+                   summarize(Total_Deaths = sum(Deaths)) %>% 
+                   arrange(desc(Total_Deaths)) %>% 
+                   head(10)), 
+         mapping = aes(x = Total_Deaths, y = Country_Region, color = Country_Region)) +
+    geom_bar(stat = 'identity')
+
+report_09_12_2020 %>% 
+  ggplot(data = (report_09_12_2020 %>%
+                   group_by(Country_Region) %>% 
+                   summarize(Total_Deaths = sum(Deaths)) %>% 
+                   arrange(desc(Total_Deaths)) %>% 
+                   head(10)), 
+         mapping = aes(x = Total_Deaths, y = Country_Region, color = Country_Region)) +
+    geom_bar(stat = 'identity')
+```
+
+
+
+
+
