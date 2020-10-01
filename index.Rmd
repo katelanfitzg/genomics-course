@@ -5,6 +5,7 @@ date: 8/31/2020
 output: html_document
 ---
 
+![](IMG_8305.png)
 
 Biology 567 Lab Reports
 
@@ -13,7 +14,8 @@ Biology 567 Lab Reports
 * [Lab 3a](Lab3/Lab3a.html)
 * [Lab 3b](Lab3/Lab3b.html)
 * [Lab 4](Lab4/Lab4.html)
-* [Lab 4a](Lab4/Lab4a.html)
+* [Data Visualization](Data_Visualization_Revised.html)
+* [Lab 5]()
 
 
 
