@@ -96,7 +96,6 @@ time_series_covid19_deaths_global_long <- time_series_covid19_deaths_global_long
 head(time_series_covid19_deaths_global_long)
 
 # FULL JOIN
-
 time_series_long_joined <- full_join(time_series_covid19_confirmed_global_long, time_series_covid19_deaths_global_long, by = c("Key")) %>% 
   select(-Key)
 head(time_series_long_joined)
