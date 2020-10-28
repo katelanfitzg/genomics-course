@@ -1,0 +1,102 @@
+---
+title: "Lab9x"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## "If-else" Conditional Statements
+```{r}
+x <- 10
+if(x == 9){print ("Confirmed")} else {print ("Cancel")}
+
+# Generate a uniform random number
+x <- runif(1, 0, 200)
+if(x > 50) { y <- 100} else { y <- 0}
+```
+
+## "For" loops
+```{r}
+for(b in -10:5) {print(b)}
+
+# Printing elements of "x"
+x <- c("a", "b", "c", "d", "e")
+for(b in 1:5) {print(x[b])}
+
+# Generating a sequence based on the length of "x"
+for(b in seq_along(x)) {print(x[b])}
+
+for(letter in x) {print(letter)}
+
+for(b in 1:5) print(x[b])
+```
+## Nested "for" loops
+```{r}
+x <- matrix(1:6, 2, 3)
+for(m in seq_len(nrow(x))) 
+  for(n in seq_len(ncol(x)))
+    {print(x[m, n])}
+```
+## "While" loops 
+```{r}
+count <- 5.5
+while(count < 10) {
+  print(count)
+  count <- count + 1.1}
+
+v <- 1
+set.seed(1)
+while(v >= 3.5 && v <= 20) {
+  coin <- rbinom(1, 1, 0.5)
+  if(coin == 1) {v <- v + 1}
+  else { v <- v - 1}
+}
+print(v)
+```
+
+## Functions
+```{r}
+f <- function()
+  {cat("Happy Halloween!\n")}
+
+f <- function(num)
+{for(i in seq_len(num))
+  {cat("Happy Halloween!\n")}
+}
+f(5)
+
+f <- function(num)
+{scat <- "Don't be a scaredy cat!\n"
+for(i in seq_len(num)) {
+  cat(scat)}
+chars <- nchar(scat) * num
+chars}
+boo_ghost <- f(3)
+
+print(boo_ghost)
+
+f <- function(num = 1)
+{scat <- "Happy Halloween!\n"
+  for(i in seq_len(num))
+  {cat(scat)}
+chars <- nchar(scat) * num
+chars}
+f(num = 4)
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
