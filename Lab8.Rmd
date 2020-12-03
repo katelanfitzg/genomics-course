@@ -1,0 +1,245 @@
+---
+title: "Lab8"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Installation
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("ggtree")
+```
+
+
+## Libraries
+```{r}
+library(tidyverse)
+library(ggtree)
+library(treeio)
+library(ggimage)
+```
+
+## Exercise 1
+![](Tree_image.svg)
+NGPhylogeny.fr is a process for phylogenetic analysis by assembling and aligning sequences, determining the relationships between the sequences, and visualizing the relationships between sequences.
+
+
+```{r}
+# Basic Trees
+library(tidyverse)
+library(ggtree)
+
+tree <- read.tree("tree_newick.nwk")
+tree
+
+ggplot(tree) + geom_tree() + theme_tree()
+
+# adding a scale
+ggtree(tree) + theme_tree2()
+
+# disable scaling
+ggtree(tree, branch.length = "none")
+
+# altering aesthetics
+ggtree(tree, branch.length = "none", color = "blue", size = 2, linetype = 3)
+```
+
+## Exercise 1
+```{r}
+# slanted tree
+ggtree(tree, layout = "slanted")
+
+# circular tree
+ggtree(tree, layout = "circular")
+
+# circular unscaled cladogram with thick red lines
+ggtree(tree, layout = "circular", branch.length = "none", color = "red", size = 2.5, linetype = 3)
+```
+
+## Other Tree Geoms
+```{r}
+# create the basic plot
+p <- ggtree(tree)
+
+# add node points
+p + geom_nodepoint()
+
+# add tip points
+p + geom_tippoint()
+
+# Label the tips
+p + geom_tiplab()
+```
+## Exercise 2
+
+Create a phylogeny with the following aesthetic characteristics:
+
+--> tips labeled in purple
+--> purple-colored diamond-shape tip points (hint: Google search “R point characters”)
+--> large semitransparent yellow node points (hint: alpha=)
+--> Add a title with `+ ggtitle(…)`
+
+```{r}
+ggtree(tree) +
+  geom_tiplab(size = 4, color = "purple") +
+  geom_tippoint(size = 1, color = "purple", pch = 23) +
+  geom_nodepoint(color = "yellow", alpha = 0.6) +
+  ggtitle("Exercise 2 Tree")
+```
+# Adjusting the internal node number
+```{r}
+ggtree(tree) +
+  geom_text(aes(label = node), hjust = -0.3)
+
+ggtree(tree) +
+  geom_tiplab()
+
+MRCA(tree, c("C", "E"))
+MRCA(tree, c("G", "H"))
+```
+# Labeling clades
+```{r}
+ggtree(tree) + 
+  geom_tiplab() +
+  geom_cladelabel(node = 17, label = "Random clade A", color = "red", offset = 0.8, align = TRUE) +
+  geom_cladelabel(node = 21, label = "Random clade B", color = "red3", offset = 0.8, align = TRUE) +
+  theme_tree2() + 
+  xlim(0, 70) + 
+  theme_tree()
+
+ggtree(tree) + 
+  geom_tiplab() + 
+  geom_hilight(node = 17, fill = "red") + 
+  geom_hilight(node = 21, fill = "red3")
+
+```
+# Connecting taxa
+```{r}
+ggtree(tree) + 
+  geom_tiplab() + 
+  geom_taxalink("E", "H", color = "green3") +
+  geom_taxalink("C", "G", color = "goldenrod", curvature = -0.9)
+```
+
+# Exercise 3
+```{r}
+MRCA(tree, c("B", "C"))
+MRCA(tree, c("L", "J"))
+
+ggtree(tree) +
+  geom_tiplab() + 
+  geom_hilight(node = 19, fill = "cyan") +
+  geom_hilight(node = 23, fill = "coral1") +
+  geom_cladelabel(node = 17, label = "Superclade 17", 
+                  color = "cornsilk3", align = TRUE) +
+  xlim(0, 70) + 
+  geom_taxalink("C", "E", color = "gray31", linetype = 2) +
+  geom_taxalink("G", "J", color = "gray31", linetype = 2) + 
+  ggtitle("Exercise 3 Tree")
+```
+# Advanced tree annotation
+```{r, echo = FALSE}
+# tree <- read.beast("data/flu_tree_beast.tree")
+
+# ggtree(tree, mrsd = "2013-01-01") + 
+#  theme_tree2() 
+
+# ggtree(tree, mrsd="2013-01-01") + 
+#  theme_tree2() + 
+#  geom_tiplab(align = TRUE, linesize = 0.5) + 
+#  xlim(1990, 2020)
+
+# msaplot(p = ggtree(tree), fasta="data/flu_aasequence.fasta", window = c(150, 175))
+```
+
+# Many trees and plotting tree with other data
+```{r}
+set.seed(42)
+
+trees <- lapply(rep(c(10, 25, 50, 100), 3), rtree)
+class(trees) <- "multiPhylo"
+ggtree(trees) + 
+  facet_wrap(~.id, scale = "free", ncol = 4) + 
+  ggtitle("Many trees")
+
+tree <- rtree(30)
+
+p <- ggtree(tree)
+d1 <- data.frame(id = tree$tip.label, val = rnorm(30, sd = 3))
+
+p2 <- facet_plot(p, panel = "dot", data=d1, geom=geom_point, aes(x = val), color = 'blue2')
+
+d2 <- data.frame(id = tree$tip.label, value = abs(rnorm(30, mean = 100, sd = 50)))
+
+p3 <- facet_plot(p2, panel = 'bar', data = d2, geom = geom_segment, 
+           aes(x = 0, xend = value, y = y, yend = y), size = 3, color = 'blue4') 
+
+p3 + theme_tree2()
+```
+# Overlay organism silouhettes
+```{r}
+newick <- "((Pongo_abelii,(Gorilla_gorilla_gorilla,(Pan_paniscus,Pan_troglodytes)Pan,Homo_sapiens)Homininae)Hominidae,Nomascus_leucogenys)Hominoidea;"
+
+tree <- read.tree(text=newick)
+
+d <- ggimage::phylopic_uid(tree$tip.label)
+d$body_mass = c(52, 114, 47, 45, 58, 6)
+
+p <- ggtree(tree) %<+% d + 
+  geom_tiplab(aes(image=uid, colour=body_mass), geom="phylopic", offset=2.5) +
+  geom_tiplab(aes(label=label), offset = .2) + xlim(NA, 7) +
+  scale_color_viridis_c()
+p
+```
+
+----------
+
+
+## Exercise 2
+
+Use CIPRES and MAFFT to further organize and align the sequences. Save the tree as fastree_result.tre.
+
+
+## Exercise 3: ggtree tutorial
+First step is to import the tree data.
+Newick and Nexus file formats are most often compatible with tree viewer software. The ggtree package implements several parser functions including:
+
+- read.tree for reading Newick files
+- read.phylip for reading Phylip files
+- read.jplace for reading Jplace files
+- read.nhx for reading NHX files
+- read.beast for parsing output of BEAST
+- read.codem1 for parsing output of CODEML
+- read.codem_mlc for parsing mlc file
+- read.hyphy for parsing output of hyphy
+- read.jplace for parsing jplace file including the output from EPA and pplacer
+- read.paml_rst for parsing rst file
+- read.r8s for parsing output of r8s
+- read.raxml for parsing output of RAxML
+
+# Exercise 4
+```{r}
+# FastTree <- read.tree("fasttree_results.tre")
+
+# MRCA(FastTree, c("Oryza_mitochondrion", "Thermotoga_lettingae"))
+# MRCA(FastTree, c("Thermotoga_lettingae", "Trypanosoma_cruzi"))
+# MRCA(FastTree, c("Trypanosoma_cruzi", "Methanocaldococcus_jannaschii"))
+
+# ggtree(FastTree, layout = "circular", branch.length = "none", yscale = "none") + 
+#  xlim(0,40) +
+#  geom_tiplab(hjust = -0.1, size = 3) +
+# geom_hilight(node = 34, fill = "orange2", extend = 0.5) + 
+#  geom_hilight(node = 30, fill = "pink") +
+# geom_hilight(node = 25, fill = "cyan2") 
+```
+
+
+
+
+
+

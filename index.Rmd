@@ -3,11 +3,11 @@ title: "index"
 author: "Katelan Fitzgerald"
 date: "8/31/2020"
 output:
-  html_document:
-    df_print: paged
   prettydoc::html_pretty:
     theme: cayman
     highlight: github
+  html_document:
+    df_print: paged
 editor_options:
   chunk_output_type: console
 ---
@@ -26,11 +26,10 @@ Biology 567 Lab Reports
 * [Lab 5x](Lab5x.html)
 * [Lab 6](Lab6.html)
 * [Lab 7](Lab7.html)
-* [Lab 8]()
-* [Lab 9]()
+* [Lab 8](Lab8.html)
+* [Lab 9](Lab9.html)
 * [Lab 9x](Lab9x.html)
-* [Lab 10]()
-* [Lab 11]()
-* [Lab 11x]()
+* [Lab 10](Lab10.html)
+* [Lab 11](Lab11.html)
 * [Lab 12](Lab12.html)
-* [Lab 13]()
+* [Lab 13](Lab12.html)
